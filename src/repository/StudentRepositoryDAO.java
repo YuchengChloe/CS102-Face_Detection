@@ -28,7 +28,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                     String email = rs.getString("email");
                     int phone    = rs.getInt("phone");
 
-                    // --- Get face image paths ---
+                    // Get face image paths
                     FaceData faceData = new FaceData();
                     String imgSql = "SELECT img_path FROM images WHERE sid = ? ORDER BY rowid";
 
@@ -42,7 +42,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                         }
                     }
 
-                    // --- Return a new Student object ---
+                    // Return a new Student object
                     return new Student(sid, name, group, email, phone, faceData);
                 }
             }
