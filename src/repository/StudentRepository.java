@@ -1,4 +1,6 @@
 package src.repository;
+import src.Student;
+
 interface StudentRepository {
     Student getStudentByID(String studentID);
     void addStudent(Student student);
