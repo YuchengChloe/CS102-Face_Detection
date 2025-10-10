@@ -13,7 +13,7 @@ public class StudentRepositoryDAO implements StudentRepository {
 
     @Override
     public Student getStudentByID(String studentID) throws SQLException {
-        final String sql = "SELECT sid, sname, class_group, email, phone FROM student WHERE sid = ?";
+        String sql = "SELECT sid, sname, class_group, email, phone FROM student WHERE sid = ?";
 
         // Open a database connection and prepare the SQL statement
         try (Connection conn = cm.getConnection();
@@ -58,5 +58,10 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         // If no student found, return null
         return null;
+    }
+
+    public void addStudent(Student student) throws SQLException{
+        String sql = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
+        
     }
 }
