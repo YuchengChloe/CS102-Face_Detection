@@ -8,8 +8,7 @@ public class Student {
     private int phone;
     private FaceData faceData;
     
-    public Student(String studentID, String studentName, String classGroup, String email, int phone,
-            FaceData faceData) {
+    public Student(String studentID, String studentName, String classGroup, String email, int phone, FaceData faceData) {
         this.studentID = studentID;
         this.studentName = studentName;
         this.classGroup = classGroup;
