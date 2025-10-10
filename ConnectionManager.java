@@ -1,6 +1,6 @@
 import java.sql.*;
 
-public class DBConnection {
+public class ConnectionManager {
     private static final String URL = "jdbc:sqlite:studentDB.db";
     
     public static Connection getConnection() throws SQLException {
