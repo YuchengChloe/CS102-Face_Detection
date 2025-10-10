@@ -1,6 +1,5 @@
 package src.repository;
 import java.sql.SQLException;
-
 import src.Student;
 
 interface StudentRepository {
