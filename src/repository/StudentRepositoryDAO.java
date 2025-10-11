@@ -16,7 +16,7 @@ public class StudentRepositoryDAO implements StudentRepository {
     private FaceData loadFaceData(Connection conn, String sid) throws SQLException {
     // Get face image paths
     FaceData faceData = new FaceData();
-    String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY rowid";
+    String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY created_at";
 
     // Prepare a query to fetch all image file paths for this student
     try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -31,7 +31,7 @@ public class StudentRepositoryDAO implements StudentRepository {
         }
     }
     return faceData;
-}
+    }
 
 
     @Override
@@ -92,7 +92,6 @@ public class StudentRepositoryDAO implements StudentRepository {
             ps.setString(1, s.getStudentID());
             ps.setString(2, s.getStudentName());
             ps.setString(3, s.getClassGroup());
-
             ps.setString(4, s.getEmail());
             ps.setString(5, s.getPhone());
             int isUpdateOk = ps.executeUpdate();

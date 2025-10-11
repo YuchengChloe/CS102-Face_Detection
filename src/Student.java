@@ -4,17 +4,20 @@ public class Student {
     private String studentID;
     private String studentName;
     private String classGroup;
-    private String email;
-    private String phone;
+    private String email = null;
+    private String phone = null;
     private FaceData faceData;
     
-    public Student(String studentID, String studentName, String classGroup, String email, String phone, FaceData faceData) {
+    
+
+    public Student(String studentID, String studentName, String classGroup, String email, String phone,
+            FaceData faceData) {
         this.studentID = studentID;
         this.studentName = studentName;
         this.classGroup = classGroup;
         this.email = email;
         this.phone = phone;
-        this.faceData = faceData;
+        this.faceData = new FaceData();
     }
 
     public String getStudentID() {
