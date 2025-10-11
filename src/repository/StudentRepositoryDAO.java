@@ -1,6 +1,8 @@
 package src.repository;
 
 import java.sql.*;
+import java.util.List;
+
 import src.FaceData;
 import src.Student;
 
@@ -68,7 +70,7 @@ public class StudentRepositoryDAO implements StudentRepository {
         return null;
     }
 
-    public boolean addStudent(Student s) throws SQLException{
+    public boolean addStudentAndImages(Student s, List<String> imagePaths) throws SQLException{
         String addStu = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
         String addImg = "insert into images (sid, img_path) values (?, ?)";
 
@@ -92,6 +94,10 @@ public class StudentRepositoryDAO implements StudentRepository {
                 ps1.setString(5, s.getPhone());
             }
 
+            ps2.setString(1, s.getStudentID());
+            for (String path : imagePaths){
+                ps2.setString(2, path);
+            }
             
 
             int isAddOk = ps1.executeUpdate();
