@@ -69,53 +69,80 @@ public class StudentRepositoryDAO implements StudentRepository {
     }
 
     public boolean addStudent(Student s) throws SQLException{
-        String sql = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
+        String addStu = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = cm.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(addStu)) {
             ps.setString(1, s.getStudentID());
             ps.setString(2, s.getStudentName());
             ps.setString(3, s.getClassGroup());
+            
+            if (s.getEmail() == null){
+                ps.setNull(4, Types.VARCHAR); 
+            } else {
+                ps.setString(4, s.getEmail());
+            }
+            
+            if (s.getPhone() == null){
+                ps.setNull(5, Types.VARCHAR);
+            } else {
+                ps.setString(5, s.getPhone());
+            }
 
-            ps.setString(4, s.getEmail());
-            ps.setString(5, s.getPhone());
             int isAddOk = ps.executeUpdate();
             return isAddOk == 1;
         }
     }
 
     public boolean updateStudent(Student s) throws SQLException {
-        String sql = "UPDATE student SET sname=?, class_group=?, email=?, phone=? WHERE sid=?";
+        String updateStu = "UPDATE student SET sname=?, class_group=?, email=?, phone=? WHERE sid=?";
 
         try (Connection conn = cm.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(updateStu)) {
             ps.setString(1, s.getStudentID());
             ps.setString(2, s.getStudentName());
             ps.setString(3, s.getClassGroup());
-            ps.setString(4, s.getEmail());
-            ps.setString(5, s.getPhone());
+
+            if (s.getEmail() == null){
+                ps.setNull(4, Types.VARCHAR); 
+            } else {
+                ps.setString(4, s.getEmail());
+            }
+            
+            if (s.getPhone() == null){
+                ps.setNull(5, Types.VARCHAR);
+            } else {
+                ps.setString(5, s.getPhone());
+            }
+
             int isUpdateOk = ps.executeUpdate();
             return isUpdateOk == 1;
         }
     }
 
     public boolean deleteStudent(String studentID) throws SQLException {
-        String sql = "DELETE FROM student WHERE sid=?";
+        String delStu = "DELETE FROM student WHERE sid=?";
+        String delImg = "Delete from images where sid =?";
 
         try (Connection conn = cm.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, studentID);
-            int isDeleteOk = ps.executeUpdate();
+            PreparedStatement ps1 = conn.prepareStatement(delStu);
+            PreparedStatement ps2 = conn.prepareStatement(delImg)) {
+            ps2.setString(1, studentID);
+            ps2.executeUpdate();
+
+            ps1.setString(1, studentID);
+            int isDeleteOk = ps1.executeUpdate();
+
             return isDeleteOk == 1;
         }
     }
 
     public boolean isStudentExists(String studentID) throws SQLException {
-        String sql = "SELECT 1 FROM student WHERE sid=? LIMIT 1";
+        String isStuExists = "SELECT 1 FROM student WHERE sid=? LIMIT 1";
         boolean exists = false;
 
         try (Connection conn = cm.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)){
+            PreparedStatement ps = conn.prepareStatement(isStuExists)){
             ps.setString(1, studentID);
 
             try (ResultSet rs = ps.executeQuery()) {
