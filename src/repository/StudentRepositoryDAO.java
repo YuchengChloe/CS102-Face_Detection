@@ -76,7 +76,7 @@ public class StudentRepositoryDAO implements StudentRepository {
             ps.setString(1, s.getStudentID());
             ps.setString(2, s.getStudentName());
             ps.setString(3, s.getClassGroup());
-            
+
             ps.setString(4, s.getEmail());
             ps.setString(5, s.getPhone());
             int isAddOk = ps.executeUpdate();
@@ -84,16 +84,49 @@ public class StudentRepositoryDAO implements StudentRepository {
         }
     }
 
-    public void updateStudent(Student s) throws SQLException {
+    public boolean updateStudent(Student s) throws SQLException {
+        String sql = "UPDATE student SET sname=?, class_group=?, email=?, phone=? WHERE sid=?";
 
+        try (Connection conn = cm.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, s.getStudentID());
+            ps.setString(2, s.getStudentName());
+            ps.setString(3, s.getClassGroup());
+
+            ps.setString(4, s.getEmail());
+            ps.setString(5, s.getPhone());
+            int isUpdateOk = ps.executeUpdate();
+            return isUpdateOk == 1;
+        }
     }
 
-    public void deleteStudent(Student s) throws SQLException {
+    public boolean deleteStudent(String studentID) throws SQLException {
+        String sql = "DELETE FROM student WHERE sid=?";
 
+        try (Connection conn = cm.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, studentID);
+            int isDeleteOk = ps.executeUpdate();
+            return isDeleteOk == 1;
+        }
     }
 
     public boolean isStudentExists(String studentID) throws SQLException {
+        String sql = "SELECT 1 FROM student WHERE sid=? LIMIT 1";
+        boolean exists = false;
 
+        try (Connection conn = cm.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)){
+            ps.setString(1, studentID);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) { // check if at least one row exists
+                    exists = true; 
+                }
+            }
+
+            return exists;
+        }
     }
 
 }

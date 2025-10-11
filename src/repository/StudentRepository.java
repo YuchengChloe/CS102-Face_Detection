@@ -5,7 +5,7 @@ import src.Student;
 interface StudentRepository {
     Student getStudentByID(String studentID) throws SQLException;
     boolean addStudent(Student student) throws SQLException;
-    void updateStudent(Student student) throws SQLException;
-    void deleteStudent(Student student) throws SQLException;
+    boolean updateStudent(Student student) throws SQLException;
+    boolean deleteStudent(String studentID) throws SQLException;
     boolean isStudentExists(String studentID) throws SQLException;
 }
