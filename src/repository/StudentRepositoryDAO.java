@@ -14,8 +14,8 @@ public class StudentRepositoryDAO implements StudentRepository {
         this.cm = cm;
     }
 
-    // private helper method as this common code repeats across multiple methods
-    private FaceData loadFaceData(Connection conn, String sid) throws SQLException {
+    // helper method, can be reused for getAll() or "view student"
+    public FaceData loadFaceData(Connection conn, String sid) throws SQLException {
     // Get face image paths
     FaceData faceData = new FaceData();
     String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY created_at";
@@ -35,8 +35,6 @@ public class StudentRepositoryDAO implements StudentRepository {
     return faceData;
     }
 
-
-    @Override
     public Student getStudentByID(String studentID) throws SQLException {
         String sql = "SELECT sid, sname, class_group, email, phone FROM student WHERE sid = ?";
 
@@ -94,15 +92,24 @@ public class StudentRepositoryDAO implements StudentRepository {
                 ps1.setString(5, s.getPhone());
             }
             
+            // bundles them together and sends them to the database in a single batch for efficiency
             for (String path : imagePaths){
                 ps2.setString(1, s.getStudentID());
                 ps2.setString(2, path);
                 ps2.addBatch();
             }
-            ps2.executeBatch();
+            // checks if all images are inserted successfully
+            int[] batchStatus = ps2.executeBatch();
+            int isAddImgOk = 1;
 
-            int isAddOk = ps1.executeUpdate();
-            return ps2.executeBatch() && isAddOk == 1;
+            for (int i : batchStatus){
+                if (i == 0){
+                    isAddImgOk = 0;
+                    break;
+                }
+            }
+            int isAddStuOk = ps1.executeUpdate();
+            return (isAddStuOk == 1 && isAddImgOk == 1);
         }
     }
 
