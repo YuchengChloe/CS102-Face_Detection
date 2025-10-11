@@ -104,7 +104,7 @@ public class StudentRepositoryDAO implements StudentRepository {
             boolean isAddStuOk = (ps1.executeUpdate() == 1);
             boolean isAddImgOk = true;
 
-            if (imagePaths != null){
+            if (imagePaths != null && !imagePaths.isEmpty()){
                 for (String path : imagePaths){
                     ps2.setString(1, s.getStudentID());
                     ps2.setString(2, path);
