@@ -14,4 +14,6 @@ interface StudentRepository {
     boolean deleteStudent(String studentID) throws SQLException;
 
     boolean isStudentExists(String studentID) throws SQLException;
+
+    Student getAllStudents() throws SQLException;
 }

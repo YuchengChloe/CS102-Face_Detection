@@ -61,7 +61,13 @@ public class StudentRepositoryDAO implements StudentRepository {
                     // Return a new Student object
                     return new Student(sid, name, group, email, phone, faceData);
                 }
+            } catch (SQLException e) {
+                // undo all if fails
+                conn.rollback();
+                throw e;
             }
+
+            conn.commit();
         }
 
         // If no student found, return null
@@ -73,9 +79,11 @@ public class StudentRepositoryDAO implements StudentRepository {
         String addImg = "insert into images (sid, img_path) values (?, ?)";
 
         try (Connection conn = cm.getConnection();
+            
             PreparedStatement ps1 = conn.prepareStatement(addStu);
             PreparedStatement ps2 = conn.prepareStatement(addImg)){
-
+            
+            conn.setAutoCommit(false);
             ps1.setString(1, s.getStudentID());
             ps1.setString(2, s.getStudentName());
             ps1.setString(3, s.getClassGroup());
@@ -109,6 +117,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                 }
             }
             int isAddStuOk = ps1.executeUpdate();
+            conn.commit();
             return (isAddStuOk == 1 && isAddImgOk == 1);
         }
     }
@@ -118,12 +127,12 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(updateStu)) {
-            ps.setString(1, s.getStudentID());
-            ps.setString(2, s.getStudentName());
-            ps.setString(3, s.getClassGroup());
+            ps.setString(1, s.getStudentName());
+            ps.setString(2, s.getClassGroup());
+            ps.setString(5, s.getStudentID());
 
             if (s.getEmail() == null){
-                ps.setNull(4, Types.VARCHAR); 
+                ps.setNull(3, Types.VARCHAR); 
             } else {
                 ps.setString(4, s.getEmail());
             }
@@ -135,6 +144,7 @@ public class StudentRepositoryDAO implements StudentRepository {
             }
 
             int isUpdateOk = ps.executeUpdate();
+            conn.commit();
             return isUpdateOk == 1;
         }
     }
@@ -151,8 +161,9 @@ public class StudentRepositoryDAO implements StudentRepository {
 
             ps1.setString(1, studentID);
             int isDelStuOk = ps1.executeUpdate();
-
-            return (isDelStuOk == 1 && isDelImgOk == 1);
+            
+            conn.commit();
+            return (isDelStuOk == 1 && isDelImgOk >= 0);
         }
     }
 
@@ -170,6 +181,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                 }
             }
 
+            conn.commit();
             return exists;
         }
     }
