@@ -70,26 +70,31 @@ public class StudentRepositoryDAO implements StudentRepository {
 
     public boolean addStudent(Student s) throws SQLException{
         String addStu = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
+        String addImg = "insert into images (sid, img_path) values (?, ?)";
 
         try (Connection conn = cm.getConnection();
-            PreparedStatement ps = conn.prepareStatement(addStu)) {
-            ps.setString(1, s.getStudentID());
-            ps.setString(2, s.getStudentName());
-            ps.setString(3, s.getClassGroup());
+            PreparedStatement ps1 = conn.prepareStatement(addStu);
+            PreparedStatement ps2 = conn.prepareStatement(addImg)){
+
+            ps1.setString(1, s.getStudentID());
+            ps1.setString(2, s.getStudentName());
+            ps1.setString(3, s.getClassGroup());
             
             if (s.getEmail() == null){
-                ps.setNull(4, Types.VARCHAR); 
+                ps1.setNull(4, Types.VARCHAR); 
             } else {
-                ps.setString(4, s.getEmail());
+                ps1.setString(4, s.getEmail());
             }
             
             if (s.getPhone() == null){
-                ps.setNull(5, Types.VARCHAR);
+                ps1.setNull(5, Types.VARCHAR);
             } else {
-                ps.setString(5, s.getPhone());
+                ps1.setString(5, s.getPhone());
             }
 
-            int isAddOk = ps.executeUpdate();
+            
+
+            int isAddOk = ps1.executeUpdate();
             return isAddOk == 1;
         }
     }
