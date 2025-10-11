@@ -41,7 +41,7 @@ public class StudentRepositoryDAO implements StudentRepository {
         // Open a database connection and prepare the SQL statement
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
-            
+            conn.setAutoCommit(false);
             // Replace the '?' placeholder with the actual studentID
             ps.setString(1, studentID);
             
@@ -119,6 +119,10 @@ public class StudentRepositoryDAO implements StudentRepository {
             int isAddStuOk = ps1.executeUpdate();
             conn.commit();
             return (isAddStuOk == 1 && isAddImgOk == 1);
+        } catch (SQLException e) {
+            // undo all if fails
+            conn.rollback();
+            throw e;
         }
     }
 
@@ -127,6 +131,8 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(updateStu)) {
+            conn.setAutoCommit(false);
+
             ps.setString(1, s.getStudentName());
             ps.setString(2, s.getClassGroup());
             ps.setString(5, s.getStudentID());
@@ -156,6 +162,8 @@ public class StudentRepositoryDAO implements StudentRepository {
         try (Connection conn = cm.getConnection();
             PreparedStatement ps1 = conn.prepareStatement(delStu);
             PreparedStatement ps2 = conn.prepareStatement(delImg)) {
+            conn.setAutoCommit(false);
+
             ps2.setString(1, studentID);
             int isDelImgOk = ps2.executeUpdate();
 
@@ -173,6 +181,8 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(isStuExists)){
+            conn.setAutoCommit(false);
+            
             ps.setString(1, studentID);
 
             try (ResultSet rs = ps.executeQuery()) {
