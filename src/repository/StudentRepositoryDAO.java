@@ -16,23 +16,23 @@ public class StudentRepositoryDAO implements StudentRepository {
 
     // helper method, can be reused for getAll() or "view student"
     public FaceData loadFaceData(Connection conn, String sid) throws SQLException {
-    // Get face image paths
-    FaceData faceData = new FaceData();
-    String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY created_at";
+        // Get face image paths
+        FaceData faceData = new FaceData();
+        String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY created_at";
 
-    // Prepare a query to fetch all image file paths for this student
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, sid);
-        try (ResultSet rs = ps.executeQuery()) {
+        // Prepare a query to fetch all image file paths for this student
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, sid);
+            try (ResultSet rs = ps.executeQuery()) {
 
-            // Execute the image query and loop through the results
-            while (rs.next()) {
-                // add image path into the FaceData object
-                faceData.addImagePath(rs.getString("img_path"));
+                // Execute the image query and loop through the results
+                while (rs.next()) {
+                    // add image path into the FaceData object
+                    faceData.addImagePath(rs.getString("img_path"));
+                }
             }
         }
-    }
-    return faceData;
+        return faceData;
     }
 
     public Student getStudentByID(String studentID) throws SQLException {
@@ -147,12 +147,12 @@ public class StudentRepositoryDAO implements StudentRepository {
             PreparedStatement ps1 = conn.prepareStatement(delStu);
             PreparedStatement ps2 = conn.prepareStatement(delImg)) {
             ps2.setString(1, studentID);
-            ps2.executeUpdate();
+            int isDelImgOk = ps2.executeUpdate();
 
             ps1.setString(1, studentID);
-            int isDeleteOk = ps1.executeUpdate();
+            int isDelStuOk = ps1.executeUpdate();
 
-            return isDeleteOk == 1;
+            return (isDelStuOk == 1 && isDelImgOk == 1);
         }
     }
 
