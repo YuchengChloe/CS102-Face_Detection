@@ -1,7 +1,7 @@
 package src.repository;
 
 import java.sql.*;
-import java.util.List;
+import java.util.*;
 
 import src.FaceData;
 import src.Student;
@@ -41,7 +41,6 @@ public class StudentRepositoryDAO implements StudentRepository {
         // Open a database connection and prepare the SQL statement
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
-            conn.setAutoCommit(false);
             // Replace the '?' placeholder with the actual studentID
             ps.setString(1, studentID);
             
@@ -61,13 +60,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                     // Return a new Student object
                     return new Student(sid, name, group, email, phone, faceData);
                 }
-            } catch (SQLException e) {
-                // undo all if fails
-                conn.rollback();
-                throw e;
             }
-
-            conn.commit();
         }
 
         // If no student found, return null
@@ -141,19 +134,20 @@ public class StudentRepositoryDAO implements StudentRepository {
 
             ps.setString(1, s.getStudentName());
             ps.setString(2, s.getClassGroup());
-            ps.setString(5, s.getStudentID());
 
             if (s.getEmail() == null){
                 ps.setNull(3, Types.VARCHAR); 
             } else {
-                ps.setString(4, s.getEmail());
+                ps.setString(3, s.getEmail());
             }
             
             if (s.getPhone() == null){
-                ps.setNull(5, Types.VARCHAR);
+                ps.setNull(4, Types.VARCHAR);
             } else {
-                ps.setString(5, s.getPhone());
+                ps.setString(4, s.getPhone());
             }
+
+            ps.setString(5, s.getStudentID());
 
             int isUpdateOk = ps.executeUpdate();
             conn.commit();
@@ -168,15 +162,13 @@ public class StudentRepositoryDAO implements StudentRepository {
         try (Connection conn = cm.getConnection();
             PreparedStatement ps1 = conn.prepareStatement(delStu);
             PreparedStatement ps2 = conn.prepareStatement(delImg)) {
-            conn.setAutoCommit(false);
 
             ps2.setString(1, studentID);
             int isDelImgOk = ps2.executeUpdate();
 
             ps1.setString(1, studentID);
             int isDelStuOk = ps1.executeUpdate();
-            
-            conn.commit();
+
             return (isDelStuOk == 1 && isDelImgOk >= 0);
         }
     }
@@ -202,4 +194,27 @@ public class StudentRepositoryDAO implements StudentRepository {
         }
     }
 
+    public List<Student> getAllStudents() throws SQLException {
+        String sql = "SELECT sid, sname, class_group, email, phone FROM student ORDER BY sid";
+        List<Student> students = new ArrayList<>();
+
+        try (Connection conn = cm.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                String sid   = rs.getString("sid");
+                String name  = rs.getString("sname");
+                String group = rs.getString("class_group");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+
+                FaceData faceData = loadFaceData(conn, sid);
+
+                Student s = new Student(sid, name, group, email, phone, faceData);
+                students.add(s);
+            }
+        }
+        return students;
+    }
 }
