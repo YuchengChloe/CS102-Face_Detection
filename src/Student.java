@@ -5,10 +5,10 @@ public class Student {
     private String studentName;
     private String classGroup;
     private String email;
-    private int phone;
+    private String phone;
     private FaceData faceData;
     
-    public Student(String studentID, String studentName, String classGroup, String email, int phone, FaceData faceData) {
+    public Student(String studentID, String studentName, String classGroup, String email, String phone, FaceData faceData) {
         this.studentID = studentID;
         this.studentName = studentName;
         this.classGroup = classGroup;
@@ -33,7 +33,7 @@ public class Student {
         return email;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
@@ -53,7 +53,7 @@ public class Student {
         this.email = email;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

@@ -54,7 +54,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                     String name  = rs.getString("sname");
                     String group = rs.getString("class_group");
                     String email = rs.getString("email");
-                    int phone    = rs.getInt("phone");
+                    String phone = rs.getString("phone");
 
                     FaceData faceData = loadFaceData(conn, sid);
 
@@ -68,7 +68,7 @@ public class StudentRepositoryDAO implements StudentRepository {
         return null;
     }
 
-    public void addStudent(Student s) throws SQLException{
+    public boolean addStudent(Student s) throws SQLException{
         String sql = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = cm.getConnection();
@@ -76,8 +76,11 @@ public class StudentRepositoryDAO implements StudentRepository {
             ps.setString(1, s.getStudentID());
             ps.setString(2, s.getStudentName());
             ps.setString(3, s.getClassGroup());
+            
             ps.setString(4, s.getEmail());
-            ps.setInt(5, s.getPhone());
+            ps.setString(5, s.getPhone());
+            int isAddOk = ps.executeUpdate();
+            return isAddOk == 1;
         }
     }
 

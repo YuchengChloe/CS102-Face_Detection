@@ -3,7 +3,7 @@ create table student(
     sname varchar not null,
     class_group varchar not null,
     email varchar,
-    phone int
+    phone varchar
 );
 
 create table images(
