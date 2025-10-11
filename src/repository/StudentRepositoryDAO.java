@@ -4,6 +4,7 @@ import java.sql.*;
 import src.FaceData;
 import src.Student;
 
+
 public class StudentRepositoryDAO implements StudentRepository {
     private final ConnectionManager cm;
 
@@ -11,13 +12,35 @@ public class StudentRepositoryDAO implements StudentRepository {
         this.cm = cm;
     }
 
+    // private helper method as this common code repeats across multiple methods
+    private FaceData loadFaceData(Connection conn, String sid) throws SQLException {
+    // Get face image paths
+    FaceData faceData = new FaceData();
+    String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY rowid";
+
+    // Prepare a query to fetch all image file paths for this student
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, sid);
+        try (ResultSet rs = ps.executeQuery()) {
+
+            // Execute the image query and loop through the results
+            while (rs.next()) {
+                // add image path into the FaceData object
+                faceData.addImagePath(rs.getString("img_path"));
+            }
+        }
+    }
+    return faceData;
+}
+
+
     @Override
     public Student getStudentByID(String studentID) throws SQLException {
         String sql = "SELECT sid, sname, class_group, email, phone FROM student WHERE sid = ?";
 
         // Open a database connection and prepare the SQL statement
         try (Connection conn = cm.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+            PreparedStatement ps = conn.prepareStatement(sql)) {
             
             // Replace the '?' placeholder with the actual studentID
             ps.setString(1, studentID);
@@ -33,22 +56,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                     String email = rs.getString("email");
                     int phone    = rs.getInt("phone");
 
-                    // Get face image paths
-                    FaceData faceData = new FaceData();
-                    String imgSql = "SELECT img_path FROM images WHERE sid = ? ORDER BY rowid";
-
-                    // Prepare a second query to fetch all image file paths for this student
-                    try (PreparedStatement psImg = conn.prepareStatement(imgSql)) {
-                        psImg.setString(1, sid);
-
-                        // Execute the image query and loop through the results
-                        try (ResultSet rsImg = psImg.executeQuery()) {
-                            while (rsImg.next()) {
-                                String path = rsImg.getString("img_path");
-                                faceData.addImagePath(path); // add image path into the FaceData object
-                            }
-                        }
-                    }
+                    FaceData faceData = loadFaceData(conn, sid);
 
                     // Return a new Student object
                     return new Student(sid, name, group, email, phone, faceData);
@@ -60,8 +68,29 @@ public class StudentRepositoryDAO implements StudentRepository {
         return null;
     }
 
-    public void addStudent(Student student) throws SQLException{
+    public void addStudent(Student s) throws SQLException{
         String sql = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
-        
+
+        try (Connection conn = cm.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, s.getStudentID());
+            ps.setString(2, s.getStudentName());
+            ps.setString(3, s.getClassGroup());
+            ps.setString(4, s.getEmail());
+            ps.setInt(5, s.getPhone());
+        }
     }
+
+    public void updateStudent(Student s) throws SQLException {
+
+    }
+
+    public void deleteStudent(Student s) throws SQLException {
+
+    }
+
+    public boolean isStudentExists(String studentID) throws SQLException {
+
+    }
+
 }
