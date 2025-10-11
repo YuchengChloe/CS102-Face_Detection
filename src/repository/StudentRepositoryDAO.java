@@ -93,15 +93,16 @@ public class StudentRepositoryDAO implements StudentRepository {
             } else {
                 ps1.setString(5, s.getPhone());
             }
-
-            ps2.setString(1, s.getStudentID());
-            for (String path : imagePaths){
-                ps2.setString(2, path);
-            }
             
+            for (String path : imagePaths){
+                ps2.setString(1, s.getStudentID());
+                ps2.setString(2, path);
+                ps2.addBatch();
+            }
+            ps2.executeBatch();
 
             int isAddOk = ps1.executeUpdate();
-            return isAddOk == 1;
+            return ps2.executeBatch() && isAddOk == 1;
         }
     }
 
