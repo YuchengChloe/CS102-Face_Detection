@@ -84,6 +84,7 @@ public class StudentRepositoryDAO implements StudentRepository {
             PreparedStatement ps2 = conn.prepareStatement(addImg)){
             
             conn.setAutoCommit(false);
+
             ps1.setString(1, s.getStudentID());
             ps1.setString(2, s.getStudentName());
             ps1.setString(3, s.getClassGroup());
@@ -99,30 +100,35 @@ public class StudentRepositoryDAO implements StudentRepository {
             } else {
                 ps1.setString(5, s.getPhone());
             }
-            
-            // bundles them together and sends them to the database in a single batch for efficiency
-            for (String path : imagePaths){
-                ps2.setString(1, s.getStudentID());
-                ps2.setString(2, path);
-                ps2.addBatch();
-            }
-            // checks if all images are inserted successfully
-            int[] batchStatus = ps2.executeBatch();
-            int isAddImgOk = 1;
 
-            for (int i : batchStatus){
-                if (i == 0){
-                    isAddImgOk = 0;
-                    break;
+            boolean isAddStuOk = (ps1.executeUpdate() == 1);
+            boolean isAddImgOk = true;
+
+            if (imagePaths != null){
+                for (String path : imagePaths){
+                    ps2.setString(1, s.getStudentID());
+                    ps2.setString(2, path);
+                    ps2.addBatch(); // bundles them together and sends them to the database in a single batch for efficiency
+                }
+                
+                int[] batchStatus = ps2.executeBatch();
+                for (int i : batchStatus){
+                    if (i != 1 && i != Statement.SUCCESS_NO_INFO){
+                        isAddImgOk = false;
+                        break;
+                    }
                 }
             }
-            int isAddStuOk = ps1.executeUpdate();
-            conn.commit();
-            return (isAddStuOk == 1 && isAddImgOk == 1);
-        } catch (SQLException e) {
-            // undo all if fails
-            conn.rollback();
-            throw e;
+            
+            if (isAddStuOk && isAddImgOk) {
+                conn.commit();
+                return true;
+            } else {
+                // something failed, undo all
+                conn.rollback();
+                return false;
+            }
+
         }
     }
 
@@ -182,7 +188,7 @@ public class StudentRepositoryDAO implements StudentRepository {
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(isStuExists)){
             conn.setAutoCommit(false);
-            
+
             ps.setString(1, studentID);
 
             try (ResultSet rs = ps.executeQuery()) {
