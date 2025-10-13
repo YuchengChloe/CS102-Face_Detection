@@ -24,7 +24,6 @@ public class StudentRepositoryDAO implements StudentRepository {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, sid);
             try (ResultSet rs = ps.executeQuery()) {
-
                 // Execute the image query and loop through the results
                 while (rs.next()) {
                     // add image path into the FaceData object
