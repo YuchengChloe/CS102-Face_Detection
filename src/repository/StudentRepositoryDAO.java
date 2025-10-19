@@ -70,6 +70,20 @@ public class StudentRepositoryDAO implements StudentRepository {
     public Student getStudentByID(String studentID) throws SQLException {
         String sql = "SELECT sid, sname, class_group, email, phone FROM student WHERE sid = ?";
 
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            // Open a database connection and prepare the SQL statement
+            conn = cm.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, studentID); // Replace the '?' placeholder with the actual studentID
+            rs = ps.executeQuery();
+
+            while (rs.next())
+        }
+
         // Open a database connection and prepare the SQL statement
         try (Connection conn = cm.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
