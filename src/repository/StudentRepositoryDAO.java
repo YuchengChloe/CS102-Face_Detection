@@ -14,24 +14,57 @@ public class StudentRepositoryDAO implements StudentRepository {
         this.cm = cm;
     }
 
+    /*
+     * caller must instatiate the ConnectionManager helper in main
+     * ConnectionManager cm = new ConnectionManager();
+     * StudentRepositoryDAO dao = new StudentRepositoryDAO(cm);
+     */
+
     // helper method, can be reused for getAll() or "view student"
     public FaceData loadFaceData(Connection conn, String sid) throws SQLException {
         // Get face image paths
         FaceData faceData = new FaceData();
         String sql = "SELECT img_path FROM images WHERE sid = ? ORDER BY created_at";
 
+        PreparedStatement ps = null; // An object that represents a precompiled SQL statement
+        ResultSet rs = null; // ResultSet holds the results of an SQL SELECT statement.
+
         // Prepare a query to fetch all image file paths for this student
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, sid);
-            try (ResultSet rs = ps.executeQuery()) {
-                // Execute the image query and loop through the results
-                while (rs.next()) {
-                    // add image path into the FaceData object
-                    faceData.addImagePath(rs.getString("img_path"));
+        try {
+            ps = conn.prepareStatement(sql); // same as $stmt = $pdo->prepare($sql); turns SQL query into an executable command.
+            ps.setString(1, sid); // same as $stmt->bindParam(':isbn', $isbn); fills the ? with the actual sid
+            rs = ps.executeQuery(); // $result = $stmt->execute();
+            while (rs.next()) { // fetch
+                faceData.addImagePath(rs.getString("img_path")); // reads the img_path column
+            }
+            return faceData;
+        } finally {
+            if (rs != null) { // calling a method on null throws a NullPointerException thats why must check
+                try {
+                    rs.close();
+                } catch (SQLException ignored) {
+                }
+            }
+
+            if (ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException ignored) {
                 }
             }
         }
-        return faceData;
+       
+        // try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        //     ps.setString(1, sid);
+        //     try (ResultSet rs = ps.executeQuery()) {
+        //         // Execute the image query and loop through the results
+        //         while (rs.next()) {
+        //             // add image path into the FaceData object
+        //             faceData.addImagePath(rs.getString("img_path"));
+        //         }
+        //     }
+        // }
+        // return faceData;
     }
 
     public Student getStudentByID(String studentID) throws SQLException {
