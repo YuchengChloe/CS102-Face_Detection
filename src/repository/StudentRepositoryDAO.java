@@ -42,29 +42,15 @@ public class StudentRepositoryDAO implements StudentRepository {
             if (rs != null) { // calling a method on null throws a NullPointerException thats why must check
                 try {
                     rs.close();
-                } catch (SQLException ignored) {
-                }
+                } catch (SQLException ignored) {}
             }
 
             if (ps != null){
                 try {
                     ps.close();
-                } catch (SQLException ignored) {
-                }
+                } catch (SQLException ignored) {}
             }
         }
-       
-        // try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        //     ps.setString(1, sid);
-        //     try (ResultSet rs = ps.executeQuery()) {
-        //         // Execute the image query and loop through the results
-        //         while (rs.next()) {
-        //             // add image path into the FaceData object
-        //             faceData.addImagePath(rs.getString("img_path"));
-        //         }
-        //     }
-        // }
-        // return faceData;
     }
 
     public Student getStudentByID(String studentID) throws SQLException {
@@ -76,85 +62,84 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         try {
             // Open a database connection and prepare the SQL statement
-            conn = cm.getConnection();
+            conn = cm.getConnection(); // ask the ConnectionManager object (cm) to open and return a ready-to-use database connection, then store it in the variable conn
             ps = conn.prepareStatement(sql);
             ps.setString(1, studentID); // Replace the '?' placeholder with the actual studentID
-            rs = ps.executeQuery();
+            rs = ps.executeQuery(); // execute the query and get the results from the database
 
-            while (rs.next())
-        }
+            while (rs.next()) {
+                String sid   = rs.getString("sid");
+                String name  = rs.getString("sname");
+                String group = rs.getString("class_group");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
 
-        // Open a database connection and prepare the SQL statement
-        try (Connection conn = cm.getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-            // Replace the '?' placeholder with the actual studentID
-            ps.setString(1, studentID);
-            
-            // Execute the query and get the results from the database
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
+                FaceData faceData = loadFaceData(conn, sid);
 
-                    // Extract each column from the current row
-                    String sid   = rs.getString("sid");
-                    String name  = rs.getString("sname");
-                    String group = rs.getString("class_group");
-                    String email = rs.getString("email");
-                    String phone = rs.getString("phone");
+                // Return a new Student object
+                return new Student(sid, name, group, email, phone, faceData);
+            }
+            // If no student found, return null
+            return null;
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ignored){}
+            }
 
-                    FaceData faceData = loadFaceData(conn, sid);
+            if (ps != null){
+                try {
+                    ps.close();
+                } catch (SQLException ignored) {}
+            }
 
-                    // Return a new Student object
-                    return new Student(sid, name, group, email, phone, faceData);
-                }
+            if (conn != null){
+                try {
+                    conn.close();
+                } catch (SQLException ignored) {}
             }
         }
-
-        // If no student found, return null
-        return null;
     }
 
     public boolean addStudentAndImages(Student s, List<String> imagePaths) throws SQLException{
         String addStu = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
         String addImg = "insert into images (sid, img_path) values (?, ?)";
 
-        try (Connection conn = cm.getConnection();
-            
-            PreparedStatement ps1 = conn.prepareStatement(addStu);
-            PreparedStatement ps2 = conn.prepareStatement(addImg)){
-            
-            conn.setAutoCommit(false);
+        Connection conn = null;
+        PreparedStatement ps1 = null;
+        PreparedStatement ps2 = null;
 
+        try {
+            conn = cm.getConnection();
+            conn.setAutoCommit(false); // turn off auto-saving so I can manually commit or roll back multiple SQL operations as one transaction
+
+            ps1 = conn.prepareStatement(addStu);
             ps1.setString(1, s.getStudentID());
             ps1.setString(2, s.getStudentName());
             ps1.setString(3, s.getClassGroup());
-            
+
             if (s.getEmail() == null){
                 ps1.setNull(4, Types.VARCHAR); 
             } else {
                 ps1.setString(4, s.getEmail());
             }
-            
-            if (s.getPhone() == null){
-                ps1.setNull(5, Types.VARCHAR);
-            } else {
-                ps1.setString(5, s.getPhone());
-            }
 
             boolean isAddStuOk = (ps1.executeUpdate() == 1);
             boolean isAddImgOk = true;
 
-            if (imagePaths != null && !imagePaths.isEmpty()){
-                for (String path : imagePaths){
+            if (imagePaths != null && !imagePaths.isEmpty()) {
+                ps2 = conn.prepareStatement(addImg);
+                for (String path : imagePaths) {
                     ps2.setString(1, s.getStudentID());
                     ps2.setString(2, path);
                     ps2.addBatch(); // bundles them together and sends them to the database in a single batch for efficiency
                 }
-                
+
                 int[] batchStatus = ps2.executeBatch();
-                for (int i : batchStatus){
-                    if (i != 1 && i != Statement.SUCCESS_NO_INFO){
-                        isAddImgOk = false;
-                        break;
+                for (int i : batchStatus) {
+                    if (i != 1 && i != Statement.SUCCESS_NO_INFO) { // conservative check
+                        isAddImgOk = false; break;
                     }
                 }
             }
@@ -163,12 +148,95 @@ public class StudentRepositoryDAO implements StudentRepository {
                 conn.commit();
                 return true;
             } else {
-                // something failed, undo all
                 conn.rollback();
                 return false;
             }
 
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback(); // something failed, undo all
+                } catch (SQLException r) {
+                    e.addSuppressed(r);
+                }
+            }
+            throw e;
+        } finally {
+            if (ps2 != null) {
+                try { 
+                    ps2.close(); 
+                } catch (SQLException ignored) {}
+            }
+
+            if (ps1 != null) {
+                try {
+                    ps1.close();
+                } catch (SQLException ignored) {}
+            }
+
+            if (conn != null) {
+                try { 
+                    conn.setAutoCommit(true);
+                } catch (SQLException ignored) {}
+                
+                try {
+                    conn.close();
+                } catch (SQLException ignored) {}
+            }
         }
+
+        // try (Connection conn = cm.getConnection();
+            
+        //     PreparedStatement ps1 = conn.prepareStatement(addStu);
+        //     PreparedStatement ps2 = conn.prepareStatement(addImg)){
+            
+        //     conn.setAutoCommit(false);
+
+        //     ps1.setString(1, s.getStudentID());
+        //     ps1.setString(2, s.getStudentName());
+        //     ps1.setString(3, s.getClassGroup());
+            
+        //     if (s.getEmail() == null){
+        //         ps1.setNull(4, Types.VARCHAR); 
+        //     } else {
+        //         ps1.setString(4, s.getEmail());
+        //     }
+            
+        //     if (s.getPhone() == null){
+        //         ps1.setNull(5, Types.VARCHAR);
+        //     } else {
+        //         ps1.setString(5, s.getPhone());
+        //     }
+
+        //     boolean isAddStuOk = (ps1.executeUpdate() == 1);
+        //     boolean isAddImgOk = true;
+
+        //     if (imagePaths != null && !imagePaths.isEmpty()){
+        //         for (String path : imagePaths){
+        //             ps2.setString(1, s.getStudentID());
+        //             ps2.setString(2, path);
+        //             ps2.addBatch();
+        //         }
+                
+        //         int[] batchStatus = ps2.executeBatch();
+        //         for (int i : batchStatus){
+        //             if (i != 1 && i != Statement.SUCCESS_NO_INFO){
+        //                 isAddImgOk = false;
+        //                 break;
+        //             }
+        //         }
+        //     }
+            
+        //     if (isAddStuOk && isAddImgOk) {
+        //         conn.commit();
+        //         return true;
+        //     } else {
+        //         // something failed, undo all
+        //         conn.rollback();
+        //         return false;
+        //     }
+
+        // }
     }
 
     public boolean updateStudent(Student s) throws SQLException {
