@@ -120,9 +120,15 @@ public class StudentRepositoryDAO implements StudentRepository {
             ps1.setString(3, s.getClassGroup());
 
             if (s.getEmail() == null){
-                ps1.setNull(4, Types.VARCHAR); 
+                ps1.setNull(4, java.sql.Types.VARCHAR); 
             } else {
                 ps1.setString(4, s.getEmail());
+            }
+
+            if (s.getPhone() == null){
+                ps1.setNull(5, java.sql.Types.VARCHAR); 
+            } else {
+                ps1.setString(5, s.getPhone());
             }
 
             boolean isAddStuOk = (ps1.executeUpdate() == 1);
@@ -135,15 +141,16 @@ public class StudentRepositoryDAO implements StudentRepository {
                     ps2.setString(2, path);
                     ps2.addBatch(); // bundles them together and sends them to the database in a single batch for efficiency
                 }
-
                 int[] batchStatus = ps2.executeBatch();
+                // scans the returned statuses and sets isAddImgOk = false if any item wasn’t successful
                 for (int i : batchStatus) {
-                    if (i != 1 && i != Statement.SUCCESS_NO_INFO) { // conservative check
-                        isAddImgOk = false; break;
+                    if (i != 1 && i != Statement.SUCCESS_NO_INFO) { // conservative check, some drivers don’t report exact counts; this still counts as success.
+                        isAddImgOk = false;
+                        break;
                     }
                 }
             }
-            
+
             if (isAddStuOk && isAddImgOk) {
                 conn.commit();
                 return true;
@@ -184,59 +191,6 @@ public class StudentRepositoryDAO implements StudentRepository {
                 } catch (SQLException ignored) {}
             }
         }
-
-        // try (Connection conn = cm.getConnection();
-            
-        //     PreparedStatement ps1 = conn.prepareStatement(addStu);
-        //     PreparedStatement ps2 = conn.prepareStatement(addImg)){
-            
-        //     conn.setAutoCommit(false);
-
-        //     ps1.setString(1, s.getStudentID());
-        //     ps1.setString(2, s.getStudentName());
-        //     ps1.setString(3, s.getClassGroup());
-            
-        //     if (s.getEmail() == null){
-        //         ps1.setNull(4, Types.VARCHAR); 
-        //     } else {
-        //         ps1.setString(4, s.getEmail());
-        //     }
-            
-        //     if (s.getPhone() == null){
-        //         ps1.setNull(5, Types.VARCHAR);
-        //     } else {
-        //         ps1.setString(5, s.getPhone());
-        //     }
-
-        //     boolean isAddStuOk = (ps1.executeUpdate() == 1);
-        //     boolean isAddImgOk = true;
-
-        //     if (imagePaths != null && !imagePaths.isEmpty()){
-        //         for (String path : imagePaths){
-        //             ps2.setString(1, s.getStudentID());
-        //             ps2.setString(2, path);
-        //             ps2.addBatch();
-        //         }
-                
-        //         int[] batchStatus = ps2.executeBatch();
-        //         for (int i : batchStatus){
-        //             if (i != 1 && i != Statement.SUCCESS_NO_INFO){
-        //                 isAddImgOk = false;
-        //                 break;
-        //             }
-        //         }
-        //     }
-            
-        //     if (isAddStuOk && isAddImgOk) {
-        //         conn.commit();
-        //         return true;
-        //     } else {
-        //         // something failed, undo all
-        //         conn.rollback();
-        //         return false;
-        //     }
-
-        // }
     }
 
     public boolean updateStudent(Student s) throws SQLException {
