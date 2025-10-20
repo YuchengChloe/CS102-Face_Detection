@@ -2,7 +2,7 @@ package src.repository;
 import java.sql.*;
 
 public class ConnectionManager {
-    private static String URL = "jdbc:sqlite:studentDB.db";
+    private static String URL = "jdbc:sqlite:src/repository/studentDB.db";
     
     public Connection getConnection() throws SQLException {
         // 1) Open the connection

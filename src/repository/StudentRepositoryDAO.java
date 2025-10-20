@@ -20,6 +20,7 @@ public class StudentRepositoryDAO implements StudentRepository {
      * ConnectionManager cm = new ConnectionManager();
      * StudentRepositoryDAO dao = new StudentRepositoryDAO(cm);
      * caller MUST handle SQLException
+     * CONSIDER USER DEFINED EXCEPTIONS !!!
      */
 
     // helper method, can be reused for getAll() or "view student"
@@ -134,7 +135,7 @@ public class StudentRepositoryDAO implements StudentRepository {
             }
 
             boolean isAddStuOk = (ps1.executeUpdate() == 1);
-            boolean isAddImgOk = true;
+            boolean isAddImgOk = false;
 
             if (imagePaths != null && !imagePaths.isEmpty()) {
                 ps2 = conn.prepareStatement(addImg);
@@ -144,6 +145,7 @@ public class StudentRepositoryDAO implements StudentRepository {
                     ps2.addBatch(); // bundles them together and sends them to the database in a single batch for efficiency
                 }
                 int[] batchStatus = ps2.executeBatch();
+                isAddImgOk = true;
                 // scans the returned statuses and sets isAddImgOk = false if any item wasn’t successful
                 for (int i : batchStatus) {
                     if (i != 1 && i != Statement.SUCCESS_NO_INFO) { // conservative check, some drivers don’t report exact counts; this still counts as success.
