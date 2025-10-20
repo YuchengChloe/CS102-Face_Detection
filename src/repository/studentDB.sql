@@ -16,10 +16,13 @@ create table images(
 
 create table session(
     session_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    course_name  varchar NOT NULL,
+    session_date varchar NOT NULL DEFAULT (date('now')),
     class_group varchar not null,
     start_time varchar not null,
     end_time varchar, 
-    is_active boolean not null default 1
+    location varchar,
+    is_active INTEGER not null default 1
 );
 
 create table session_roster(
@@ -39,4 +42,16 @@ create table attendance_logs(
     confidence REAL,
     constraint attendance_logs_fk1 foreign key(session_id) references session(session_id),
     constraint attendance_logs_fk2 foreign key(sid) references student(sid)
+);
+
+CREATE TABLE session_attendance(
+    session_id INTEGER NOT NULL,
+    sid        varchar NOT NULL,
+    status     varchar NOT NULL,        -- 'Pending','Present','Late','Absent'
+    first_seen varchar,                 -- first detection timestamp (nullable)
+    method     varchar,                 -- 'face','manual' etc.
+    PRIMARY KEY(session_id, sid),
+    FOREIGN KEY(session_id) REFERENCES session(session_id),
+    FOREIGN KEY(sid)        REFERENCES student(sid),
+    CHECK (status IN ('Pending','Present','Late','Absent'))
 );
