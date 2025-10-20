@@ -38,7 +38,7 @@ create table attendance_logs(
     session_id int not null,
     sid varchar not null,
     event_type varchar not null,
-    timestamp varchar NOT NULL DEFAULT (datetime('now')),
+    timestamp text NOT NULL DEFAULT (datetime('now')),
     confidence REAL,
     constraint attendance_logs_fk1 foreign key(session_id) references session(session_id),
     constraint attendance_logs_fk2 foreign key(sid) references student(sid)
