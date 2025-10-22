@@ -1,16 +1,23 @@
 package com.smartattendance.repository;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ConnectionManager {
     // Path where the SQLite database will be stored
+    // Path currently set to user's home directory under "smart-attendance/studentDB.db"
     private static final String EXTRACTED_DB_PATH = System.getProperty("user.home") + File.separator
             + "smart-attendance" + File.separator + "studentDB.db";
 
     // Path to the SQL script inside the JAR
+    //working
     private static final String DB_RESOURCE_PATH = "/db/studentDB.sql";
 
     public Connection getConnection() throws SQLException {
@@ -53,11 +60,21 @@ public class ConnectionManager {
 
             // Convert InputStream to String (SQL commands)
             String sqlScript = new String(in.readAllBytes(), StandardCharsets.UTF_8);
-            System.out.println("Executing SQL script: \n" + sqlScript);
+            // System.out.println("Executing SQL script: \n" + sqlScript);
 
             // Execute the SQL script to create the tables and schema
+            // if conn is successfully created, execute the script
             try (Statement stmt = conn.createStatement()) {
-                stmt.execute(sqlScript);
+                String[] statements = sqlScript.split(";");
+                for (String sqlcmd : statements) {
+                    sqlcmd = sqlcmd.trim();
+                    if (!sqlcmd.isEmpty()) {
+                        stmt.execute(sqlcmd);
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Error executing SQL script", e);
             }
 
             System.out.println("Database created and schema initialized.");
