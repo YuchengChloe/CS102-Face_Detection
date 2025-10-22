@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.smartattendance.gui.controllers.MainViewController">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="10" style="-fx-background-color: #dddddd;" prefWidth="150">
+            <Button fx:id="studentsBtn" text="Students" onAction="#handleStudents"/>
+            <!-- <Button fx:id="sessionsBtn" text="Sessions" onAction="#handleSessions"/>
+            <Button fx:id="liveBtn" text="Live Recognition" onAction="#handleLive"/>
+            <Button fx:id="reportsBtn" text="Reports" onAction="#handleReports"/>
+            <Button fx:id="settingsBtn" text="Settings" onAction="#handleSettings"/> -->
+        </VBox>
+    </left>
+
+    <!-- Dynamic content will go here -->
+    <center>
+        <StackPane fx:id="contentPane"/>
+    </center>
+</BorderPane>
