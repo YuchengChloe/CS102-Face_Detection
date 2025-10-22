@@ -1,4 +1,4 @@
-package src.repository;
+package com.smartattendance.repository;
 import java.sql.*;
 
 public class ConnectionManager {
