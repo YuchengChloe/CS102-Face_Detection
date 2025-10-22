@@ -397,4 +397,35 @@ public class StudentRepositoryDAO implements StudentRepository {
             }
         }
     }
+
+    public int populateSessionRoster(int sessionId) throws SQLException {
+        // for this session, automatically add all students whose student.class_group matches the session’s class_group
+        String sql = "INSERT OR IGNORE INTO session_roster (session_id, sid) " +
+                     "SELECT ?, s.sid FROM student s " +
+                     "WHERE s.class_group = (SELECT class_group FROM session WHERE session_id = ?)";
+        
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = cm.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, sessionId);
+            ps.setInt(2, sessionId);
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted;
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ignored) {}
+            }
+
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ignored) {}
+            }
+        }
+    }
 }

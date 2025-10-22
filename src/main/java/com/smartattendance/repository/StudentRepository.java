@@ -16,4 +16,6 @@ interface StudentRepository {
     boolean isStudentExists(String studentID) throws SQLException;
 
     List<Student> getAllStudents() throws SQLException;
+
+    int populateSessionRoster(int sessionID) throws SQLException;
 }
