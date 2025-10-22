@@ -1,4 +1,4 @@
-package src.repository.exceptions;
+package com.smartattendance.repository.exceptions;
 
 public class StudentNotFoundException extends RuntimeException {
     public StudentNotFoundException(String message) {
