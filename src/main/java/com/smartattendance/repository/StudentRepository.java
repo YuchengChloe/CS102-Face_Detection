@@ -1,8 +1,8 @@
-package src.repository;
+package com.smartattendance.repository;
 import java.sql.SQLException;
 import java.util.List;
 
-import src.Student;
+import com.smartattendance.model.Student;
 
 interface StudentRepository {
     Student getStudentByID(String studentID) throws SQLException;

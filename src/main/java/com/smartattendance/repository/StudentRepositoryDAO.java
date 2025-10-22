@@ -1,10 +1,10 @@
-package src.repository;
+package com.smartattendance.repository;
 
 import java.sql.*;
 import java.util.*;
 
-import src.FaceData;
-import src.Student;
+import com.smartattendance.model.FaceData;
+import com.smartattendance.model.Student;
 
 
 public class StudentRepositoryDAO implements StudentRepository {
