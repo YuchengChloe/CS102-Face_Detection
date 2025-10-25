@@ -7,22 +7,25 @@ public class Student {
     private String email = null;
     private String phone = null;
     private FaceData faceData;
-    
-    
+
+
 
     public Student(String studentID, String studentName, String classGroup, String email, String phone,
-            FaceData faceData) {
+                   FaceData faceData) {
         this.studentID = studentID;
         this.studentName = studentName;
         this.classGroup = classGroup;
         this.email = email;
         this.phone = phone;
-        this.faceData = new FaceData();
+        // [FIXED] This now correctly assigns the loaded FaceData object
+        this.faceData = faceData;
     }
 
     public String getStudentID() {
         return studentID;
     }
+
+    // ... (rest of the getters and setters remain the same) ...
 
     public String getStudentName() {
         return studentName;
@@ -59,6 +62,4 @@ public class Student {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
-    
 }
