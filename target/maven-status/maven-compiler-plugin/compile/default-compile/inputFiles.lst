@@ -1,16 +1,20 @@
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/Main.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/generator/CSVGenerator.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/generator/PDFGenerator.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/generator/ReportGenerator.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/gui/controllers/MainViewController.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/gui/controllers/StudentViewController.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/model/FaceData.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/model/Student.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/ConnectionManager.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/StudentRepository.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/StudentRepositoryDAO.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/exceptions/DuplicateStudentIDException.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/exceptions/ImageProcessingException.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/exceptions/SessionNotFoundException.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/repository/exceptions/StudentNotFoundException.java
-/Users/JiaYing/Library/CloudStorage/OneDrive-SingaporeManagementUniversity/Sem 2.1/CS102/Project/CS102-Smart-Attendance-System-Project/src/main/java/com/smartattendance/validation/ImageValidator.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\generator\CSVGenerator.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\generator\PDFGenerator.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\generator\ReportGenerator.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\gui\controllers\LiveRecognitionController.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\gui\controllers\MainViewController.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\gui\controllers\StudentViewController.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\Launcher.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\Main.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\model\FaceData.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\model\Student.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\ConnectionManager.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\exceptions\DuplicateStudentIDException.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\exceptions\ImageProcessingException.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\exceptions\SessionNotFoundException.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\exceptions\StudentNotFoundException.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\StudentRepository.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\repository\StudentRepositoryDAO.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\service\FaceRecognitionService.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\service\RecognitionResult.java
+C:\wamp64\www\CS102 Programming Fundamentals 2\Project\CS102-Smart-Attendance-System-Project\src\main\java\com\smartattendance\validation\ImageValidator.java

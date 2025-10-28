@@ -1,5 +1,10 @@
 package com.smartattendance;
 
+// [ADD THIS IMPORT]
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.opencv_java;
+import org.opencv.core.Core;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,6 +12,15 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 
 public class Main extends Application {
+
+    // [ADD THIS STATIC BLOCK]
+    // This block loads the native OpenCV library when the application starts.
+    static {
+        // Using Core.NATIVE_LIBRARY_NAME ensures the correct library file
+        // (e.g., opencv_java480.dll on Windows) is loaded.
+        Loader.load(opencv_java.class);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainView.fxml"));

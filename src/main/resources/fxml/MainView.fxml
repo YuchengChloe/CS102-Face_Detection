@@ -10,6 +10,7 @@
     <left>
         <VBox spacing="10" style="-fx-background-color: #dddddd;" prefWidth="150">
             <Button fx:id="studentsBtn" text="Students" onAction="#handleStudents"/>
+            <Button fx:id="liveBtn" text="Live Recognition" onAction="#handleLive"/>
             <!-- <Button fx:id="sessionsBtn" text="Sessions" onAction="#handleSessions"/>
             <Button fx:id="liveBtn" text="Live Recognition" onAction="#handleLive"/>
             <Button fx:id="reportsBtn" text="Reports" onAction="#handleReports"/>
