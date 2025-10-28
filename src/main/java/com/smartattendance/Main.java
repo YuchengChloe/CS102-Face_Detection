@@ -1,6 +1,8 @@
 package com.smartattendance;
 
 // [ADD THIS IMPORT]
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.opencv.opencv_java;
 import org.opencv.core.Core;
 
 import javafx.application.Application;
@@ -16,7 +18,7 @@ public class Main extends Application {
     static {
         // Using Core.NATIVE_LIBRARY_NAME ensures the correct library file
         // (e.g., opencv_java480.dll on Windows) is loaded.
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        Loader.load(opencv_java.class);
     }
 
     @Override
