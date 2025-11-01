@@ -38,3 +38,5 @@ buildNumber.properties
 # Student data - user-specific, not version controlled
 src/main/resources/images/students/*/
 
+# But DON'T ignore .gitkeep
+!src/main/resources/images/students/.gitkeep
