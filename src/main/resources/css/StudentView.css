@@ -1,0 +1,93 @@
+/* Make table rows taller for better readability */
+.student-table .table-row-cell {
+    -fx-min-height: 50px;
+}
+
+/* Center align the actions column */
+.student-table .actions-column {
+    -fx-alignment: CENTER;
+}
+
+/* ID column styling - smaller, monospace font */
+.student-table .id-cell {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B7280;
+}
+
+/* Name column - bold for emphasis */
+.student-table .name-cell {
+    -fx-font-weight: bold;
+}
+
+/* Class badge styling */
+.class-badge {
+    -fx-background-color: #DBEAFE;
+    -fx-text-fill: #1E3A8A;
+    -fx-padding: 4 12 4 12;
+    -fx-background-radius: 12;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+/* Empty table placeholder */
+.student-table:empty {
+    -fx-background-color: white;
+}
+
+.student-table .placeholder .label {
+    -fx-text-fill: #9CA3AF;
+    -fx-font-size: 16px;
+}
+
+/* Search/Filter section (if you add one later) */
+.search-box {
+    -fx-prompt-text-fill: #9CA3AF;
+    -fx-pref-width: 300px;
+}
+
+/* Action buttons container spacing */
+.action-buttons-container {
+    -fx-spacing: 8;
+    -fx-alignment: CENTER;
+}
+
+/* Hover effect for entire row when hovering over action buttons */
+.student-table .table-row-cell:hover .action-button {
+    -fx-opacity: 1.0;
+}
+
+.student-table .table-row-cell .action-button {
+    -fx-opacity: 0.6;
+}
+
+/* Add Student button in header - make it stand out */
+.student-header .add-button {
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.3), 8, 0, 0, 2);
+}
+
+.student-header .add-button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.5), 12, 0, 0, 3);
+}
+
+/* Statistics cards (if you add summary stats) */
+.student-stats-card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 8;
+    -fx-padding: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 6, 0, 0, 1);
+}
+
+.student-stats-card .stat-value {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E3A8A;
+}
+
+.student-stats-card .stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: #6B7280;
+    -fx-font-weight: normal;
+}

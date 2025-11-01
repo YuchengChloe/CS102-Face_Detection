@@ -1,0 +1,284 @@
+/* ===== Global Styles ===== */
+.root {
+    -fx-background-color: #F9FAFB;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-size: 14px;
+    -fx-text-fill: #111827;
+}
+
+/* ===== Buttons ===== */
+.button {
+    -fx-background-color: #1E3A8A;
+    -fx-text-fill: white;
+    -fx-padding: 10 15 10 15;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-min-height: 35px;
+    -fx-pref-height: 35px;
+    -fx-font-size: 13px;
+    -fx-wrap-text: false;
+}
+
+.button:hover {
+    -fx-background-color: derive(#1E3A8A, 10%);
+}
+
+.button:pressed {
+    -fx-background-color: derive(#1E3A8A, -10%);
+}
+
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+.button.accent {
+    -fx-background-color: #3B82F6;
+}
+
+.button.accent:hover {
+    -fx-background-color: derive(#3B82F6, 10%);
+}
+
+.button.success {
+    -fx-background-color: #10B981;
+}
+
+.button.success:hover {
+    -fx-background-color: derive(#10B981, 10%);
+}
+
+.button.danger {
+    -fx-background-color: #EF4444;
+}
+
+.button.danger:hover {
+    -fx-background-color: derive(#EF4444, 10%);
+}
+
+/* ===== Text Fields ===== */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 14px;
+}
+
+.text-field:focused {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2;
+}
+
+/* ===== ComboBox ===== */
+.combo-box {
+    -fx-background-color: white;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.combo-box:focused {
+    -fx-border-color: #3B82F6;
+    -fx-border-width: 2;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #111827;
+}
+
+/* ===== Labels ===== */
+.label {
+    -fx-text-fill: #111827;
+    -fx-font-size: 14px;
+}
+
+.label.header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1E3A8A;
+}
+
+.label.subheader {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #111827;
+}
+
+.label.counter {
+    -fx-text-fill: #1E3A8A;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-min-width: 90px;
+    -fx-alignment: center-right;
+}
+
+/* ===== Tables ===== */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.table-view .column-header {
+    -fx-background-color: #1E3A8A;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #1E3A8A;
+}
+
+.table-view .column-header-background .filler {
+    -fx-background-color: #1E3A8A;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FAFBFC;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.table-cell {
+    -fx-text-fill: #111827;
+    -fx-padding: 8;
+}
+
+/* ===== Dialogs ===== */
+.dialog-pane {
+    -fx-background-color: white;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-min-width: 500px;
+}
+
+.dialog-pane .content {
+    -fx-padding: 20;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #1E3A8A;
+    -fx-text-fill: white;
+}
+
+.dialog-pane:header .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+/* ===== Action Buttons (in table) ===== */
+.action-button {
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-padding: 5;
+    -fx-border-color: transparent;
+    -fx-background-radius: 3;
+}
+
+.action-button:hover {
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
+.edit-button {
+    -fx-background-color: transparent;
+}
+
+.edit-button:hover {
+    -fx-background-color: #DBEAFE;
+}
+
+.delete-button {
+    -fx-background-color: transparent;
+}
+
+.delete-button:hover {
+    -fx-background-color: #FEE2E2;
+}
+
+/* ===== Tooltips ===== */
+.tooltip {
+    -fx-background-color: #111827;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-padding: 5 10 5 10;
+    -fx-font-size: 12px;
+}
+
+/* ===== Alerts/Status ===== */
+.alert.information .header-panel {
+    -fx-background-color: #3B82F6;
+}
+
+.alert.error .header-panel {
+    -fx-background-color: #EF4444;
+}
+
+.alert.warning .header-panel {
+    -fx-background-color: #F59E0B;
+}
+
+.alert.confirmation .header-panel {
+    -fx-background-color: #10B981;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    -fx-background-color: #1E3A8A;
+    -fx-padding: 20;
+}
+
+.sidebar .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 12 15 12 15;
+    -fx-background-radius: 5;
+    -fx-border-color: transparent;
+    -fx-min-height: 40px;
+    -fx-wrap-text: true; /* Allow text wrapping */
+}
+
+.sidebar .button:hover {
+    -fx-background-color: derive(#1E3A8A, 20%);
+}
+
+.sidebar .button.active {
+    -fx-background-color: #3B82F6;
+}
+
+/* ===== Cards/Panels ===== */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-border-color: #E5E7EB;
+    -fx-border-radius: 8;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 2);
+}
+
+/* ===== ImageView ===== */
+.image-view {
+    -fx-border-color: #E5E7EB;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+}

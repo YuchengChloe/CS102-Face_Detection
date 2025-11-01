@@ -5,25 +5,52 @@
 <?import javafx.geometry.Insets?>
 
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.smartattendance.gui.controllers.StudentViewController"
-      spacing="10">
+    fx:controller="com.smartattendance.gui.controllers.StudentViewController"
+    spacing="15" 
+    stylesheets="@../css/Application.css, @../css/StudentView.css">
 
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="10" right="10" bottom="10" left="10" />
     </padding>
 
-    <TableView fx:id="studentTable" prefHeight="400" VBox.vgrow="ALWAYS">
+    <!-- Header with Stats -->
+    <HBox styleClass="student-header" alignment="CENTER_LEFT" spacing="20">
+        <Label text="Student Management" styleClass="header"/>
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- dk if i will make stats cards (count total students) -->
+        <!-- 
+        <VBox styleClass="student-stats-card" spacing="5">
+            <Label text="Total Students" styleClass="stat-label"/>
+            <Label fx:id="totalStudentsLabel" text="0" styleClass="stat-value"/>
+        </VBox>
+        -->
+        
+        <Button text="➕ Enroll New Student" onAction="#handleAddStudent" 
+                styleClass="accent, add-button"/>
+    </HBox>
+
+    <!-- dk if i will make Search/Filter bar -->
+    <!-- 
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField styleClass="search-box" promptText="🔍 Search students..."/>
+        <ComboBox promptText="Filter by class" prefWidth="150"/>
+    </HBox>
+    -->
+
+    <!-- Student Table -->
+    <TableView fx:id="studentTable" styleClass="table-view, student-table" 
+               prefHeight="500" VBox.vgrow="ALWAYS">
+        <placeholder>
+            <Label text="No students found. Click 'Add Student' to get started."/>
+        </placeholder>
         <columns>
-            <TableColumn fx:id="idColumn" text="ID" prefWidth="100"/>
-            <TableColumn fx:id="nameColumn" text="Name" prefWidth="150"/>
+            <TableColumn fx:id="idColumn" text="Student ID" prefWidth="120" styleClass="id-column"/>
+            <TableColumn fx:id="nameColumn" text="Full Name" prefWidth="180" styleClass="name-column"/>
             <TableColumn fx:id="groupColumn" text="Class" prefWidth="100"/>
-            <TableColumn fx:id="emailColumn" text="Email" prefWidth="200"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="220"/>
             <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="150"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="100" styleClass="actions-column"/>
         </columns>
     </TableView>
-
-    <HBox spacing="10">
-        <!-- <Button text="Add Student" onAction="#handleAddStudent"/>
-        <Button text="Delete Student" onAction="#handleDeleteStudent"/> -->
-    </HBox>
 </VBox>
