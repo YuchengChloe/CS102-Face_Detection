@@ -13,7 +13,6 @@ import javafx.scene.Parent;
 
 public class Main extends Application {
 
-    // [ADD THIS STATIC BLOCK]
     // This block loads the native OpenCV library when the application starts.
     static {
         // Using Core.NATIVE_LIBRARY_NAME ensures the correct library file
@@ -23,9 +22,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/MainView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainView.fxml"));
+        Parent root = loader.load();
+        
+        Scene scene = new Scene(root, 1200, 700);
+        // Add global stylesheet
+        scene.getStylesheets().add(getClass().getResource("/css/Application.css").toExternalForm());
+        
         primaryStage.setTitle("Smart Attendance System");
-        primaryStage.setScene(new Scene(root, 900, 600));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 

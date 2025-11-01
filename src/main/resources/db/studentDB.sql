@@ -95,4 +95,4 @@ INSERT INTO attendance_logs (session_id, sid, event_type, timestamp, confidence)
 (3, 'S005', 'Present', datetime('now'), 1.00);
 
 -- Sample Session Attendance
-INSERT INTO session_attendance (session_id, sid)
+INSERT INTO session_attendance (session_id, sid);

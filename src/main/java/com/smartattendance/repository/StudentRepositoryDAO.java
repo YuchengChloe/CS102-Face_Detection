@@ -6,7 +6,6 @@ import java.util.*;
 import com.smartattendance.model.FaceData;
 import com.smartattendance.model.Student;
 
-
 public class StudentRepositoryDAO implements StudentRepository {
     private final ConnectionManager cm;
 
@@ -34,7 +33,8 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         // Prepare a query to fetch all image file paths for this student
         try {
-            ps = conn.prepareStatement(sql); // same as $stmt = $pdo->prepare($sql); turns SQL query into an executable command.
+            ps = conn.prepareStatement(sql); // same as $stmt = $pdo->prepare($sql); turns SQL query into an executable
+                                             // command.
             ps.setString(1, sid); // same as $stmt->bindParam(':isbn', $isbn); fills the ? with the actual sid
             rs = ps.executeQuery(); // $result = $stmt->execute();
             while (rs.next()) { // fetch
@@ -45,13 +45,15 @@ public class StudentRepositoryDAO implements StudentRepository {
             if (rs != null) { // calling a method on null throws a NullPointerException thats why must check
                 try {
                     rs.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (ps != null){
+            if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
@@ -65,14 +67,15 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         try {
             // Open a database connection and prepare the SQL statement
-            conn = cm.getConnection(); // ask the ConnectionManager object (cm) to open and return a ready-to-use database connection, then store it in the variable conn
+            conn = cm.getConnection(); // ask the ConnectionManager object (cm) to open and return a ready-to-use
+                                       // database connection, then store it in the variable conn
             ps = conn.prepareStatement(sql);
             ps.setString(1, studentID); // Replace the '?' placeholder with the actual studentID
             rs = ps.executeQuery(); // execute the query and get the results from the database
 
             while (rs.next()) {
-                String sid   = rs.getString("sid");
-                String name  = rs.getString("sname");
+                String sid = rs.getString("sid");
+                String name = rs.getString("sname");
                 String group = rs.getString("class_group");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
@@ -88,24 +91,27 @@ public class StudentRepositoryDAO implements StudentRepository {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException ignored){}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (ps != null){
+            if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (conn != null){
+            if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
 
-    public boolean addStudentAndImages(Student s, List<String> imagePaths) throws SQLException{
+    public boolean addStudentAndImages(Student s, List<String> imagePaths) throws SQLException {
         String addStu = "INSERT INTO student (sid, sname, class_group, email, phone) VALUES (?, ?, ?, ?, ?)";
         String addImg = "insert into images (sid, img_path) values (?, ?)";
 
@@ -115,21 +121,22 @@ public class StudentRepositoryDAO implements StudentRepository {
 
         try {
             conn = cm.getConnection();
-            conn.setAutoCommit(false); // turn off auto-saving so I can manually commit or roll back multiple SQL operations as one transaction
+            conn.setAutoCommit(false); // turn off auto-saving so I can manually commit or roll back multiple SQL
+                                       // operations as one transaction
 
             ps1 = conn.prepareStatement(addStu);
             ps1.setString(1, s.getStudentID());
             ps1.setString(2, s.getStudentName());
             ps1.setString(3, s.getClassGroup());
 
-            if (s.getEmail() == null){
-                ps1.setNull(4, java.sql.Types.VARCHAR); 
+            if (s.getEmail() == null) {
+                ps1.setNull(4, java.sql.Types.VARCHAR);
             } else {
                 ps1.setString(4, s.getEmail());
             }
 
-            if (s.getPhone() == null){
-                ps1.setNull(5, java.sql.Types.VARCHAR); 
+            if (s.getPhone() == null) {
+                ps1.setNull(5, java.sql.Types.VARCHAR);
             } else {
                 ps1.setString(5, s.getPhone());
             }
@@ -142,13 +149,16 @@ public class StudentRepositoryDAO implements StudentRepository {
                 for (String path : imagePaths) {
                     ps2.setString(1, s.getStudentID());
                     ps2.setString(2, path);
-                    ps2.addBatch(); // bundles them together and sends them to the database in a single batch for efficiency
+                    ps2.addBatch(); // bundles them together and sends them to the database in a single batch for
+                                    // efficiency
                 }
                 int[] batchStatus = ps2.executeBatch();
                 isAddImgOk = true;
-                // scans the returned statuses and sets isAddImgOk = false if any item wasn’t successful
+                // scans the returned statuses and sets isAddImgOk = false if any item wasn’t
+                // successful
                 for (int i : batchStatus) {
-                    if (i != 1 && i != Statement.SUCCESS_NO_INFO) { // conservative check, some drivers don’t report exact counts; this still counts as success.
+                    if (i != 1 && i != Statement.SUCCESS_NO_INFO) { // conservative check, some drivers don’t report
+                                                                    // exact counts; this still counts as success.
                         isAddImgOk = false;
                         break;
                     }
@@ -174,25 +184,29 @@ public class StudentRepositoryDAO implements StudentRepository {
             throw e;
         } finally {
             if (ps2 != null) {
-                try { 
-                    ps2.close(); 
-                } catch (SQLException ignored) {}
+                try {
+                    ps2.close();
+                } catch (SQLException ignored) {
+                }
             }
 
             if (ps1 != null) {
                 try {
                     ps1.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
             if (conn != null) {
-                try { 
+                try {
                     conn.setAutoCommit(true);
-                } catch (SQLException ignored) {}
-                
+                } catch (SQLException ignored) {
+                }
+
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
@@ -210,7 +224,7 @@ public class StudentRepositoryDAO implements StudentRepository {
             ps = conn.prepareStatement(sql);
             ps.setString(1, s.getStudentName());
             ps.setString(2, s.getClassGroup());
-            
+
             if (s.getEmail() == null) {
                 ps.setNull(3, java.sql.Types.VARCHAR);
             } else {
@@ -218,13 +232,13 @@ public class StudentRepositoryDAO implements StudentRepository {
             }
 
             if (s.getPhone() == null) {
-                ps.setNull(4, java.sql.Types.VARCHAR); 
+                ps.setNull(4, java.sql.Types.VARCHAR);
             } else {
                 ps.setString(4, s.getPhone());
             }
-            
+
             ps.setString(5, s.getStudentID());
-            
+
             int isUpdateOk = ps.executeUpdate();
             conn.commit();
             return isUpdateOk == 1;
@@ -238,20 +252,23 @@ public class StudentRepositoryDAO implements StudentRepository {
             }
             throw e;
         } finally {
-            if (ps != null){
+            if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
-                } catch (SQLException ignored) {}
-                
+                } catch (SQLException ignored) {
+                }
+
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
@@ -286,35 +303,39 @@ public class StudentRepositoryDAO implements StudentRepository {
 
             return ok;
         } catch (SQLException e) {
-            if (conn != null){
-                try { 
-                    conn.rollback(); 
+            if (conn != null) {
+                try {
+                    conn.rollback();
                 } catch (SQLException r) {
                     e.addSuppressed(r);
                 }
             }
             throw e;
         } finally {
-            if (ps1 != null){
-                try { 
-                    ps1.close(); 
-                } catch (SQLException ignored) {}
+            if (ps1 != null) {
+                try {
+                    ps1.close();
+                } catch (SQLException ignored) {
+                }
             }
-            
-            if (ps2 != null){
+
+            if (ps2 != null) {
                 try {
                     ps2.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
             if (conn != null) {
                 try {
                     conn.setAutoCommit(true);
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
 
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
@@ -335,19 +356,22 @@ public class StudentRepositoryDAO implements StudentRepository {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException ignored){}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (ps != null){
+            if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (conn != null){
+            if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
@@ -366,8 +390,8 @@ public class StudentRepositoryDAO implements StudentRepository {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                String sid   = rs.getString("sid");
-                String name  = rs.getString("sname");
+                String sid = rs.getString("sid");
+                String name = rs.getString("sname");
                 String group = rs.getString("class_group");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
@@ -381,29 +405,33 @@ public class StudentRepositoryDAO implements StudentRepository {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException ignored){}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (ps != null){
+            if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
-            if (conn != null){
+            if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
 
     public int populateSessionRoster(int sessionId) throws SQLException {
-        // for this session, automatically add all students whose student.class_group matches the session’s class_group
+        // for this session, automatically add all students whose student.class_group
+        // matches the session’s class_group
         String sql = "INSERT OR IGNORE INTO session_roster (session_id, sid) " +
-                     "SELECT ?, s.sid FROM student s " +
-                     "WHERE s.class_group = (SELECT class_group FROM session WHERE session_id = ?)";
-        
+                "SELECT ?, s.sid FROM student s " +
+                "WHERE s.class_group = (SELECT class_group FROM session WHERE session_id = ?)";
+
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -418,14 +446,32 @@ public class StudentRepositoryDAO implements StudentRepository {
             if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
 
             if (conn != null) {
                 try {
                     conn.close();
-                } catch (SQLException ignored) {}
+                } catch (SQLException ignored) {
+                }
             }
         }
     }
+
+    public List<String> getAllClassGroups() throws SQLException {
+        String sql = "SELECT DISTINCT class_group FROM student ORDER BY class_group";
+        List<String> classGroups = new ArrayList<>();
+
+        try (Connection conn = cm.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                classGroups.add(rs.getString("class_group"));
+            }
+            return classGroups;
+        }
+    }
+
 }

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.geometry.Insets?>
+
+<DialogPane xmlns:fx="http://javafx.com/fxml" 
+          fx:controller="com.smartattendance.gui.controllers.StudentEnrollmentDialogController"
+          stylesheets="@../css/Application.css"
+          prefWidth="600">
+    <content>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+            
+            <Label text="Student Information" styleClass="subheader"/>
+            
+            <GridPane hgap="15" vgap="12">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100" prefWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS" minWidth="300"/>
+                </columnConstraints>
+                
+                <Label text="Student ID:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="idField" promptText="e.g., S001" 
+                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                
+                <Label text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="nameField" promptText="e.g., John Doe"
+                          GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                
+                <Label text="Class:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <ComboBox fx:id="classGroupField" promptText="Select Class" maxWidth="Infinity"
+                          GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                
+                <Label text="Email (optional):" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="emailField" promptText="student@example.com"
+                          GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                
+                <Label text="Phone (optional):" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <TextField fx:id="phoneField" promptText="98123456"
+                          GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+            </GridPane>
+            
+            <Separator/>
+            
+            <Label text="Face Recognition Setup" styleClass="subheader"/>
+
+            <VBox spacing="10">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Button fx:id="captureButton" text="📷 Capture" 
+                            onAction="#handleCapture" 
+                            styleClass="accent"
+                            prefWidth="120"/>
+                    <Button fx:id="stopCaptureButton" text="⏹ Stop" 
+                            onAction="#handleStopCapture" 
+                            styleClass="danger"
+                            prefWidth="100"/>
+                    <Button fx:id="uploadButton" text="📁 Upload" 
+                            onAction="#handleUpload"
+                            prefWidth="120"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label fx:id="imageCounter" text="0/20 images" 
+                           styleClass="counter"
+                           style="-fx-font-weight: bold; -fx-font-size: 14px;"
+                           minWidth="90"
+                           alignment="CENTER_RIGHT"/>
+                </HBox>
+            </VBox>
+            
+            <ImageView fx:id="previewArea" fitWidth="550" fitHeight="400" 
+                      preserveRatio="true" styleClass="image-view"/>
+        </VBox>
+    </content>
+</DialogPane>
