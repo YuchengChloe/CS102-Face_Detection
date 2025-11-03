@@ -165,9 +165,13 @@ public class StudentEnrollmentDialogController {
                     MatOfRect faces = new MatOfRect();
                     faceDetector.detectMultiScale(grayFrame, faces);
 
-                    // Only capture if exactly one face is detected
+// Only capture if exactly one face is detected
                     if (faces.toArray().length == 1) {
-                        String imagePath = saveImage(frame, studentID);
+                        // FIX: Extract the face from the frame
+                        Rect faceRect = faces.toArray()[0];
+                        Mat face = new Mat(frame, faceRect); // Crop the frame to the face
+
+                        String imagePath = saveImage(face, studentID); // <-- SOLUTION: Save the cropped face
                         if (imagePath != null) {
                             capturedImages.add(imagePath);
                             Platform.runLater(() -> {
@@ -241,10 +245,28 @@ public class StudentEnrollmentDialogController {
             for (int i = 0; i < filesToProcess; i++) {
                 File file = selectedFiles.get(i);
                 try {
-                    String imagePath = copyImageToStudentFolder(file, studentID);
-                    capturedImages.add(imagePath);
-                    updatePreview(imagePath);
-                } catch (IOException e) {
+                    // FIX: Load image, detect face, crop, and save
+                    Mat img = Imgcodecs.imread(file.getAbsolutePath());
+                    if (img.empty()) continue;
+
+                    Mat grayImg = new Mat();
+                    Imgproc.cvtColor(img, grayImg, Imgproc.COLOR_BGR2GRAY);
+                    MatOfRect faces = new MatOfRect();
+                    faceDetector.detectMultiScale(grayImg, faces, 1.1, 3, 0, new Size(30, 30), new Size());
+
+                    if (faces.toArray().length == 1) {
+                        Rect faceRect = faces.toArray()[0];
+                        Mat face = new Mat(img, faceRect); // Crop the face
+
+                        String imagePath = saveImage(face, studentID); // Reuse your saveImage method
+
+                        capturedImages.add(imagePath);
+                        updatePreview(imagePath); // This should now work correctly
+                    } else {
+                        // Handle images with no faces or multiple faces
+                        Platform.runLater(() -> showError("Upload Error", "Could not find exactly one face in: " + file.getName()));
+                    }
+                } catch (Exception e) { // Catch general exception
                     showError("Upload Error", "Failed to upload image: " + file.getName());
                 }
             }
